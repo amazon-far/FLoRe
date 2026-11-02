@@ -1,0 +1,35 @@
+# Offline UMI-conversion deps (raw recording -> UMI Zarr ReplayBuffer + optional
+# LeRobot export). DECISION-I: these install into the SAME collection `.venv` —
+# one maintained environment for capture AND conversion. bootstrap.sh installs
+# this file automatically (after requirements-venv.txt). To refresh by hand:
+#
+#   uv pip install --python .venv/bin/python -r env/requirements-processing.txt
+#
+# Then convert (same venv as the viz/recorder):
+#   .venv/bin/python processing/convert_to_umi.py data/recordings/session_XXX -o session_XXX.zarr.zip
+#   .venv/bin/python processing/inspect_umi.py session_XXX.zarr.zip
+#
+# numpy + scipy are NOT listed here — they are pinned in requirements-venv.txt
+# (numpy==2.4.6, scipy==1.17.1) and the conversion core is tested against those.
+# The deps below are constrained to be compatible with numpy 2.x.
+#
+# The JpegXl codec id we write ('imagecodecs_jpegxl') matches UMI's vendored
+# codec (processing/imagecodecs_numcodecs.py), so a stock UMI/diffusion_policy
+# loader reads camera0_rgb without any of our code.
+zarr<3
+numcodecs>=0.13          # numpy>=2 compatible (HuMI's 0.11 predates numpy 2.x)
+imagecodecs>=2024.1.1    # JPEG-XL encode/decode for camera0_rgb
+av>=12.0                 # h264 (libx264) video for the LeRobot v2.1 export; harmless for the Zarr path
+opencv-python>=4.10      # JPEG decode + aspect-preserving resize/crop
+pandas>=2.0
+pyarrow>=14              # LeRobot v2.1 parquet writer (processing/convert_to_lerobot.py)
+tqdm>=4.66
+
+# NOTE: LeRobot export (processing/zarr_to_lerobot.py, DECISION-K) is OPTIONAL and
+# its heavy deps (lerobot -> torch/ffmpeg/datasets) are deliberately NOT installed
+# here. Install on demand only if you need the LeRobot bridge:
+#   uv pip install --python .venv/bin/python lerobot
+# The LeRobotDataset.create/add_frame/save_episode API has shifted across lerobot
+# releases (e.g. the `vcodec=` kwarg on create()); zarr_to_lerobot.py probes for it
+# and falls back, but if your training stack needs a specific lerobot version, pin
+# THAT version here so the export matches what training reads.

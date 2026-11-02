@@ -190,6 +190,7 @@ def test_a_garbled_default_qpos_is_reported_not_raised(tmp_path):
     """A truncated / re-shaped bake must degrade, not crash the launch."""
     if not (_REPO / "third_party/UMI_collection/robot_assets/g1_yam/g1_29dof_yam.urdf").is_file():
         pytest.skip("UMI_collection submodule is not checked out (the URDF is checked before the bake)")
+    pytest.importorskip("yourdfpy")  # resolve_deploy_anchor checks yourdfpy before the bake
     bad = tmp_path / "home_anchor.json"
     bad.write_text(json.dumps({"default_qpos": [0.0] * 12}))
     anchor, reason = RP.resolve_deploy_anchor(_ROLES, home_anchor_path=str(bad))

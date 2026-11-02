@@ -43,11 +43,14 @@ loop.
 
 This repository holds the code for both levels. Released so far: the **low-level controller** (its
 training in Isaac Lab, its interactive test in the browser with MuJoCo compiled to WebAssembly, the
-pretrained checkpoint, and its deployment on a Unitree G1) and the hardware of the **robot-free data
-collection interface**.
+pretrained checkpoint, and its deployment on a Unitree G1) and the **robot-free data collection
+interface**: its 3D-printable parts and its collection software.
 
 # 📰 News
 
+- **2026-11-02** — Release of the data collection software of the robot-free interface
+  (`third_party/UMI_collection`): live visualization, recording, conversion to the training Zarr,
+  quality checks and replay.
 - **2026-10-26** — The paper is on [arXiv](https://arxiv.org/abs/2610.35862).
 - **2026-10-19** — Release of the paper, the pretrained low-level controller (ONNX) with its real-robot
   deployment on the Unitree G1, and the 3D-printable parts of the robot-free data collection interface.
@@ -62,6 +65,7 @@ collection interface**.
 - [x] High-level policy: source code of the force-reactive diffusion policy (`flore/`)
 - [x] Pretrained low-level controller (ONNX)
 - [x] Robot-free data collection interface (3D-printable parts)
+- [x] Robot-free data collection interface: collection, conversion and replay software
 - [x] Real-robot deployment on the Unitree G1
 - [ ] High-level policy: training and deployment guide
 
@@ -76,6 +80,7 @@ collection interface**.
   - [4. Run the tests](#4-run-the-tests)
 - [🧠 Pretrained Low-level Controller](#-pretrained-low-level-controller)
 - [✋ Robot-free Data Collection Interface](#-robot-free-data-collection-interface)
+  - [Collecting data](#collecting-data)
 - [🤖 Real-robot Deployment on the Unitree G1](assets/real_robot_deployment.md)
 - [📝 Citation](#-citation)
 - [🙏 Acknowledgments](#-acknowledgments)
@@ -94,7 +99,8 @@ FLoRe/
 │   │   │   ├── wbt_realtime_eval/      #   ONNX policy -> in-browser MuJoCo bundle with the force UI
 │   │   │   └── wbt_wrappers_inference/ #   policy wrappers and inference utilities
 │   │   └── thirdparty/holosoma/        #   holosoma, the training framework (git submodule)
-│   └── mjswan/                         # MuJoCo + ONNX Runtime in the browser (WebAssembly)
+│   ├── mjswan/                         # MuJoCo + ONNX Runtime in the browser (WebAssembly)
+│   └── UMI_collection/                 # DATA COLLECTION: rig bridges, live viz, recorder, Zarr converter, replay
 ├── flore/                              # HIGH LEVEL: force-reactive diffusion policy (data, models, serving)
 ├── scripts/                            #   training / offline inference / online planner entry points
 ├── tests/                              #   CPU-only unit tests of flore/
@@ -328,6 +334,34 @@ flanges that join the handle, the F/T sensor and the YAM gripper (`yam_back.stl`
 `yam_ft.stl`), and `G1 Adapter.stl`, which mounts the gripper–sensor assembly on the G1's wrist.
 `G1 Adapter.stl`, `yam_ft.stl` and `yam_umi.stl` are in meters and the other three in millimeters, so
 scale those three by 1000 in your slicer.
+
+### Collecting data
+
+The collection software is in [`third_party/UMI_collection`](third_party/UMI_collection/README.md). It
+runs in its own environments (two `uv` virtual environments and a source-built libsurvive for the
+Vive Trackers), separate from the two of [Installation](#-installation):
+
+```bash
+(cd third_party/UMI_collection && ./bootstrap.sh)    # once; --viz-only for the no-hardware UI
+bash scripts/collect_data.sh --mock                  # no hardware: the live scene on http://localhost:8080
+MODE=3pt RECORD=1 bash scripts/collect_data.sh       # the rig: both hands + the torso tracker, recording
+```
+
+`MODE` selects the tracked keypoints: `1pt` (left hand), `2pt` (both hands), `3pt` (+ torso) or `5pt`
+(+ both feet). The launcher checks every device and prints a go/no-go status board before it records;
+each `s` … `e` on the keyboard is one episode under `third_party/UMI_collection/data/recordings/`.
+Then check a session and convert it to the Zarr dataset the high-level policy trains on:
+
+```bash
+cd third_party/UMI_collection
+.venv/bin/python processing/audit_session.py data/recordings/<session>
+.venv/bin/python processing/convert_to_umi.py data/recordings/<session> \
+    -o data/datasets/<session>.zarr.zip --hands both_head_dual
+./run_replay_zarr_viz.sh data/datasets/<session>.zarr.zip    # fidelity check on http://localhost:8084
+```
+
+Host setup (udev rules, the CAN adapters, the `input` group), the device configuration, calibration
+and the recording protocol are in the [collection README](third_party/UMI_collection/README.md).
 
 # 🤖 Real-robot Deployment on the Unitree G1
 

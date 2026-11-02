@@ -1,0 +1,46 @@
+{
+  "rnea_compensator_config": {
+    "_comment": "RIGHT HAND RNEA config, SEEDED (not independently calibrated). conventions (wrench_sign, imu_offset, accel_is_specific_force) copied from the LEFT hand; mass/com/inertia taken from the right hand's latest Bota estimate. wrench_sign is UNVERIFIED for the right hand \u2014 a wrong global sign makes RNEA ADD instead of subtract. VALIDATE with a static tilt (compensated wrench should stay ~0 as you reorient; if it grows worse, flip wrench_sign) before trusting RNEA on the right. The viz surfaces this via wrench_sign_verified=false. As with the left, the UMI adapter zeroes geometry.imu_offset at runtime because the 12-vector IMU is already at the sensor origin. A Recompensation on this hand overwrites mass/com/inertia (inertia has ZERO effect on the force residual \u2014 only torque \u2014 so mass/com are what matter for force anti-shake).",
+    "payload_properties": {
+      "mass": 0.921621,
+      "com": {
+        "x": 0.00728348,
+        "y": 3.32948e-05,
+        "z": 0.0854903
+      },
+      "inertia": {
+        "Ixx": 0.00777245,
+        "Ixy": -0.000191666,
+        "Ixz": -0.00118626,
+        "Iyy": 0.00594961,
+        "Iyz": -0.000206014,
+        "Izz": 0.00348079
+      }
+    },
+    "geometry": {
+      "_comment": "sensor-origin -> IMU point [m], SENSOR axes. STANDALONE value; the UMI adapter zeroes this at runtime.",
+      "imu_offset": [
+        0.0,
+        0.0,
+        -0.0257
+      ]
+    },
+    "conventions": {
+      "_comment": "wrench_sign copied from LEFT and NOT verified on the right hand \u2014 see top _comment. wrench_sign_verified=false makes the viz warn.",
+      "accel_is_specific_force": true,
+      "wrench_sign": -1.0,
+      "wrench_sign_verified": false
+    },
+    "toggles": {
+      "enable_linear_inertia": true,
+      "enable_rotational_inertia": true,
+      "enable_com_coupling": true
+    },
+    "alpha_estimator": {
+      "omega_lowpass_cutoff_hz": 20.0,
+      "alpha_lowpass_cutoff_hz": 20.0,
+      "min_dt": 0.0001,
+      "max_dt": 0.01
+    }
+  }
+}

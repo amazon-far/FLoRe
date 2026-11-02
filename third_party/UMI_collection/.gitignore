@@ -1,0 +1,21 @@
+# Environments built by bootstrap.sh (never committed)
+.venv/
+.venv-vive/
+
+# Everything a session writes: raw takes, logs, converted datasets
+data/
+
+# Per-rig Bota payload: seeded from payload_compensator.example.json by bootstrap.sh,
+# then rewritten in place by force_torque/estimate_payload.py and the viz's
+# "Recompensation" button
+robot_assets/bota_config/bota_payload_utils/payload_compensator.json
+robot_assets/bota_config/bota_payload_utils/payload_compensator_left.json
+robot_assets/bota_config/bota_payload_utils/payload_compensator_right.json
+robot_assets/bota_config/bota_payload_utils/*.bak
+robot_assets/bota_config/rnea_dynamic_compensator/*.bak
+robot_assets/bota_config/rnea_dynamic_compensator/*.PRErecomp_*.json
+
+# Python caches
+__pycache__/
+*.py[cod]
+.pytest_cache/

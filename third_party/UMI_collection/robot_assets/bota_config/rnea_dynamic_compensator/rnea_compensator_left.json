@@ -1,0 +1,46 @@
+{
+  "rnea_compensator_config": {
+    "_comment": "LEFT HAND RNEA (single-body Newton-Euler) dynamic compensator config. Consumed by third_party/bota_demo_py rnea_core.RneaCompensatorConfig.from_json via the UMI SensorReader RNEA adapter. NOTE: UMI's FtChain already transports the IMU to the SENSOR ORIGIN before packing the 12-vector, so the adapter OVERRIDES geometry.imu_offset to [0,0,0] at runtime (the offset below is the physically-correct standalone value, kept for documentation / standalone bota_demo_py use). mass/com/inertia = AVERAGE of 3 Bota estimator runs; a Recompensation on this hand overwrites them. wrench_sign was calibrated on hardware for the left hand.",
+    "payload_properties": {
+      "mass": 0.911001,
+      "com": {
+        "x": 0.00894621,
+        "y": 0.00229934,
+        "z": 0.0832846
+      },
+      "inertia": {
+        "Ixx": 0.00741542,
+        "Ixy": -0.000242341,
+        "Ixz": -0.0007742,
+        "Iyy": 0.00587295,
+        "Iyz": -0.000123221,
+        "Izz": 0.00315247
+      }
+    },
+    "geometry": {
+      "_comment": "sensor-origin -> IMU point [m], SENSOR axes. STANDALONE value; the UMI adapter zeroes this because the 12-vector IMU is already at the sensor origin (see _comment).",
+      "imu_offset": [
+        0.0,
+        0.0,
+        -0.0257
+      ]
+    },
+    "conventions": {
+      "_comment": "accel_is_specific_force MUST be true. wrench_sign = -1 calibrated on the LEFT hand (Bota reads opposite sign to prediction). wrench_sign_verified is a UMI-only marker (ignored by rnea_core) the viz reads to warn about unverified hands.",
+      "accel_is_specific_force": true,
+      "wrench_sign": -1.0,
+      "wrench_sign_verified": true
+    },
+    "toggles": {
+      "enable_linear_inertia": true,
+      "enable_rotational_inertia": true,
+      "enable_com_coupling": true
+    },
+    "alpha_estimator": {
+      "omega_lowpass_cutoff_hz": 20.0,
+      "alpha_lowpass_cutoff_hz": 20.0,
+      "min_dt": 0.0001,
+      "max_dt": 0.01
+    }
+  }
+}

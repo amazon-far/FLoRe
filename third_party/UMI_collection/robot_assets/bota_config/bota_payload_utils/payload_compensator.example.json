@@ -1,0 +1,21 @@
+{
+  "payload_compensator_config": {
+    "payload_properties": {
+      "mass": 0.862223,
+      "com": {
+        "x": 0.00601077,
+        "y": 0.00415069,
+        "z": 0.0686351
+      },
+      "inertia": {
+        "Ixx": 0.00165716,
+        "Ixy": 0.000921965,
+        "Ixz": -0.000879284,
+        "Iyy": 0.00668576,
+        "Iyz": -0.00174144,
+        "Izz": 0.000206502
+      }
+    },
+    "enable_dynamic_compensation": false
+  }
+}

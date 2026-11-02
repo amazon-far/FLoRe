@@ -1,0 +1,16 @@
+# py3.9 venv (.venv-vive): the RealSense camera bridge + the VIVE tracker bridge's
+# runtime deps. Forced to py3.9 because pyrealsense2 ships a cp39-locked wheel.
+#
+# pysurvive is deliberately ABSENT: the PyPI wheel (1.1.21,
+# uploaded 2023-03-11, bundling libsurvive "1.2.7" + its own libusb) is three years
+# behind on Gen2-lighthouse OOTX/tracking fixes and its libusb segfaults on some hosts.
+# libsurvive is built FROM SOURCE at commit 5588cadf5ab764b51e50f9b08996009d1b9f836e
+# (bootstrap.sh step 2a, default ~/libsurvive) and its pure-ctypes bindings are put on
+# PYTHONPATH (+ bin/ on LD_LIBRARY_PATH) by run_collection_viz.sh for the tracker
+# process. bridges/tracker/vive_tracker_bridge.py refuses the wheel by provenance.
+#
+# DOCUMENTATION ONLY — bootstrap.sh installs these inline.
+pyrealsense2==2.56.5.9235
+opencv-python==4.13.0.92
+numpy==2.0.2
+websockets==15.0.1

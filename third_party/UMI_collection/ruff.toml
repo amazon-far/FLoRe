@@ -1,0 +1,16 @@
+# This directory is a separate stack with its own interpreters (py3.9 tracker/camera
+# bridges, a py3.12 hub; see README.md) and is linted with the FLoRe root config plus
+# these style-only exemptions, so the code stays identical to the rig's copy. Error
+# classes (syntax errors, undefined names, redefinitions, ...) are still enforced.
+extend = "../../pyproject.toml"
+
+[lint]
+extend-ignore = [
+    "E402",  # imports after the sys.path set-up the scripts need
+    "E702",  # several statements on one line (tests)
+    "E731",  # a lambda bound to a name
+    "E741",  # single-letter `l` / `I` names (physics notation)
+    "F401",  # unused imports
+    "F541",  # f-strings without placeholders
+    "F841",  # locals that are assigned but unused
+]

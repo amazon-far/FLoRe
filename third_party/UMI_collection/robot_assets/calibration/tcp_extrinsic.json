@@ -1,0 +1,12 @@
+{
+  "T_tracker_tcp": [
+    [0.0, -1.0, 0.0, 0.0],
+    [-1.0, 0.0, 0.0, -0.225],
+    [0.0, 0.0, -1.0, 0.05],
+    [0.0, 0.0, 0.0, 1.0]
+  ],
+  "calibrated": true,
+  "frame": "puck_body_libsurvive_RAW",
+  "axis_map": "-y,-x,-z",
+  "_note": "puck->TCP transform, applied as world_T_tcp = world_T_puck @ T_tracker_tcp on the RECORDED RAW puck pose. ROTATION IS NO LONGER IDENTITY (2026-08-06): the puck body axes are NOT the wrist axes -- they are related by the measured -y,-x,-z relabel M = [[0,-1,0],[-1,0,0],[0,0,-1]] (proper rotation, det=+1, symmetric). Verified interactively on replay/inspect_tracker_frame.py (:8088) over sessions 2026.08.06_14.12.52 / 14.47.49: relabeling the TCP body axes by M leaves the trajectory bit-identical and only spins the triads, and folding it with the puck->TCP lever yields THIS single 4x4. The TRANSLATION (0,-0.225,0.05) is the SAME physical lever as the superseded (0.225,0,-0.05) -- merely expressed in the correct frame: the lever is (0.225,0,-0.05) in WRIST coords, and M @ that = (0,-0.225,0.05) in PUCK coords. The old file stored the WRIST-frame vector while apply_tcp_extrinsic applies it in the PUCK frame; that was only valid while the rotation was assumed identity, and on real data the conflation put every stored eef 33 cm off (measured on session_2026.08.06_16.35.57/take_000, 718 samples). SELF-CONSISTENCY (machine precision on that take): TCP axes == wrist axes, TCP == wrist + 0.242*wrist_x (the measured wrist->fingertip-midpoint datum _TCP_ALONG_WRIST_X_M), and the raw puck is exactly recoverable from the stored TCP. So the trained robot0_eef_pos still lands on the 0.242 m fingertip grasp point -- now with correct AXES. This matches what RAW_FRAME=1 collect_data.sh draws live (collection_viz._RAW_RELABEL_M), so collection, replay, and the zarr are ONE convention. History of the translation leg: 0.20->0.27->0.24->0.21 (all wrist->TCP guesses applied from the puck origin) -> (0.225,0,-0.05) measured but frame-mislabeled -> (0,-0.225,0.05) + rotation M (correct frame). NOTE: scripts/hl_serving.py _TCP_OFFSET is the WRIST->TCP lever (0.242,0,0) -- a DIFFERENT LEG; do NOT set the two equal. RE-CONVERT + RE-TRAIN: datasets built before this change carry a 33 cm-off eef POSITION and a 180deg-off eef ROTATION."
+}

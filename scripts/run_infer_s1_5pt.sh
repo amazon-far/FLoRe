@@ -30,9 +30,8 @@
 #
 # PREREQUISITES
 #   * the viz extra (yourdfpy + viser):  uv pip install --python .venv/bin/python -e ".[viz]"
-#   * both submodules, for the URDF and holosoma's home_anchor.json:
-#       git submodule update --init third_party/UMI_collection            # NOT --recursive
-#       git submodule update --init --recursive third_party/holosoma_extensions
+#   * the yam URDF (third_party/UMI_collection/robot_assets) and holosoma's home_anchor.json
+#     (third_party/holosoma_extensions), both shipped with the repository
 #   * the checkpoint's own training zarr on disk (the page replays REAL dataset anchors).
 #     scripts/fetch_dataset.sh 0902_merged3_h200_5pt
 #

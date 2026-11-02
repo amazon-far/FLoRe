@@ -1,0 +1,57 @@
+{
+  "payload_estimator_config": {
+    "output_config_file_name": "payload_compensator.json",
+    "runtime_verbosity": false,
+    "min_time": 20.0,
+    "max_time": 60.0,
+    "prior_payload_properties": {
+      "mass": 0.81,
+      "com": {
+        "x": 0.043,
+        "y": 0.004,
+        "z": 0.088
+      },
+      "inertia": {
+        "Ixx": 0.0,
+        "Ixy": 0.0,
+        "Ixz": 0.0,
+        "Iyy": 0.0,
+        "Iyz": 0.0,
+        "Izz": 0.0
+      }
+    },
+    "measurement_noise_covariance": {
+      "force": {
+        "x": 0.0253,
+        "y": 0.0225,
+        "z": 0.0204
+      },
+      "torque": {
+        "x": 0.001,
+        "y": 0.001,
+        "z": 0.001
+      },
+      "linear_acc": {
+        "x": 0.000322,
+        "y": 0.000367,
+        "z": 0.000762
+      },
+      "angular_vel": {
+        "x": 0.0000283,
+        "y": 0.0000177,
+        "z": 0.00000310
+      },
+      "angular_acc": {
+        "x": 0.00005,
+        "y": 0.00005,
+        "z": 0.0005
+      }
+    },
+    "estimation_covariance_convergence_threshold": {
+      "mass": 0.0003,
+      "com": 0.0003,
+      "inertia": 0.003,
+      "wrench_bias": 0.005
+    }
+  }
+}

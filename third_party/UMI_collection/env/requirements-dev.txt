@@ -1,0 +1,4 @@
+# Optional dev/test deps for the py3.12 .venv. Install with:
+#   uv pip install --python .venv/bin/python -r env/requirements-dev.txt
+# Needed only to run the test suites (the runtime stack does not require pytest).
+pytest>=8.0

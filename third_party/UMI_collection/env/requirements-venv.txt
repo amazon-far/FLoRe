@@ -1,0 +1,37 @@
+# py3.12 venv (.venv): viz hub + mink IK + Bota F/T + gripper + keyboard bridge.
+# Pins are the versions verified live in the source `bota` / `i2rt-kbd` conda envs.
+# Bump only after a clean re-test (newer pyrealsense exists).
+
+# --- viz + IK ---
+viser==1.0.30
+mink==1.1.1
+mujoco==3.9.0
+yourdfpy==0.0.60
+daqp==0.8.7
+qpsolvers==4.12.0
+scipy==1.17.1
+numpy==2.4.6
+websockets==16.0
+
+# --- Bota force/torque (PyPI; the driver wheel is abi3 cp312) ---
+# Bota Control Toolkit generation A (Nov-2025 demo line). The estimator/compensator
+# API changed from the old 0.0.2: there is no longer a create_ft_sensor_hwi() wrapper;
+# the caller assembles the 12-vector (raw wrench + IMU-in-sensor-frame via bota_tf_utils
+# .BotaTfImu) and passes it to estimator.update(ts, w12) / compensator.update(ts, raw12,
+# comp12). The underlying EKF is unchanged (numerically identical compensation). update()
+# returns a bota_control.BotaControlReturnCode ENUM (always truthy — compare to .OK,
+# never `if not update()`). The estimator still hardcodes enable_dynamic_compensation
+# in the file it writes (1.0.2 -> false), so force_torque/*.py force it true after.
+bota-driver==1.1.9
+bota-payload-utils==1.0.2
+bota-control==1.0.4
+bota-tf-utils==1.0.12
+
+# --- gripper (vendored i2rt subset on PYTHONPATH needs these at runtime) ---
+python-can==4.5.0
+pydantic==2.13.4
+click<8.2.0
+packaging==26.0
+
+# --- keyboard -> gripper evdev bridge ---
+evdev==1.9.3

@@ -1,0 +1,12 @@
+{
+  "T_tracker_head": [
+    [0.0, 1.0, 0.0, 0.0],
+    [0.0, 0.0, -1.0, 0.0],
+    [-1.0, 0.0, 0.0, 0.0],
+    [0.0, 0.0, 0.0, 1.0]
+  ],
+  "calibrated": true,
+  "frame": "chest_puck_body_libsurvive_RAW",
+  "axis_map": "x=-z, y=+x, z=-y",
+  "_note": "CHEST (3pt 'head' keypoint) puck->chest-BODY transform, applied as world_T_chest = world_T_puck @ T_tracker_head on the RECORDED RAW chest-puck pose -- the same compose apply_tcp_extrinsic does for the hands, through the same helper. ROTATION ONLY, translation is EXACTLY ZERO: the chest is a body reference with no wrist, no TCP and no lever (its triad IS the frame origin), so head_pos is bit-identical with and without this file and only head_rot_axis_angle moves. The rotation is H = Ry(90deg) @ Rx(90deg) = [[0,1,0],[0,0,-1],[-1,0,0]] (proper, det=+1): the chest puck is bolted onto the harness rotated, so its raw libsurvive body axes are not the torso reference the keypoint is meant to express. Read off the live rig on 2026-08-26 from RAW_FRAME=1 MODE=3pt collect_data.sh -- rotating the drawn chest triad by 90deg about its own green +y then 90deg about the resulting red +x lands it on the SAME axis convention the hands' TCP triads use (x_new=-z_old, y_new=+x_old, z_new=-y_old). DO NOT confuse with the hands' tcp_extrinsic.json rotation M = [[0,-1,0],[-1,0,0],[0,0,-1]]: different puck, different bracket, and unlike M (symmetric, M@M==I) this one has ORDER 3 (H@H@H==I) so H^-1 != H -- reusing one for the other silently mis-orients the keypoint. Mirrored by collection_viz._HEAD_RELABEL_M for the live RAW_FRAME view (pinned equal by viz/test_logic_collection.py) and by replay_raw_viz's chest pose; replay_zarr_viz needs nothing, it draws the stored head_* keys. RE-CONVERT: 3pt datasets built before this file carry the RAW chest-puck axes in head_rot_axis_angle (head_pos is unaffected), so anything trained on the head ROTATION -- the 32-D 3pt layout's [23:29] head rot6d -- is in the old convention and must be re-converted to match a rig running this file."
+}

@@ -156,7 +156,12 @@ Unitree G1 robot model
 
 Source     https://github.com/unitreerobotics/unitree_ros
 Component  third_party/holosoma_extensions/src/extensions/wbt_wrappers/wbt_wrappers_inference/urdf/g1_29dof.urdf,
-           third_party/holosoma_extensions/src/extensions/wbt_wrappers/wbt_wrappers_inference/urdf/g1_29dof_pika_gripper.urdf
+           third_party/holosoma_extensions/src/extensions/wbt_wrappers/wbt_wrappers_inference/urdf/g1_29dof_pika_gripper.urdf,
+           third_party/UMI_collection/robot_assets/g1_yam/ (g1_29dof_yam.urdf and the G1 link meshes),
+           third_party/UMI_collection/third_party/humi_ik/humi_data_collection/g1_description/
+Modification note. g1_29dof_yam.urdf mounts a Bota F/T sensor link and the i2rt
+linear_4310 (YAM) gripper on each wrist; the HuMI copy keeps only the meshes its MJCF
+references.
 
 BSD 3-Clause License
 
@@ -187,3 +192,120 @@ SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
 CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+HuMI (Humanoid Manipulation Interface)
+
+Source     https://github.com/Richard-coder-Nai/HuMI
+Component  third_party/UMI_collection/third_party/humi_ik/ (the humi_data_collection.ikumi
+           mink IK package, paths.py and the G1 description)
+Modification note. A subset of humi_data_collection/src/humi_data_collection/; ikumi/solution.py
+adds a typing.Self fallback for Python 3.10.
+
+MIT License
+
+Copyright (c) 2026 Ruiqian Nai
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+i2rt
+
+Source     https://github.com/i2rt-robotics/i2rt
+Component  third_party/UMI_collection/third_party/i2rt/ (a subset of the motor drivers and
+           utilities), third_party/UMI_collection/robot_assets/g1_yam/meshes/yam_gripper_base.STL,
+           yam_gripper_tip_left.STL and yam_gripper_tip_right.STL (from
+           i2rt/robot_models/gripper/linear_4310/assets/)
+Modification note. Adds the motor_drivers/ and utils/ package __init__.py files; in
+motor_drivers/dm_driver.py the CAN bandwidth check takes the control frequency as a
+parameter, the motor offset is stored as float, and set_zero_position() is added for the
+gripper's homing self-test.
+
+MIT License
+
+Copyright (c) I2RT Robotics
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+imagecodecs (via Universal Manipulation Interface)
+
+Source     https://github.com/cgohlke/imagecodecs,
+           https://github.com/real-stanford/universal_manipulation_interface
+Component  third_party/UMI_collection/processing/imagecodecs_numcodecs.py (UMI's copy of
+           imagecodecs/numcodecs.py, the JPEG-XL numcodecs codec)
+
+Copyright (c) 2021-2022, Christoph Gohlke
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice,
+   this list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+
+
+Bota Systems demos
+
+Source     https://code.botasys.com (bota_demo_py)
+Component  third_party/UMI_collection/robot_assets/bota_config/ (the Bota driver and payload
+           utility configurations, adapted to the data collection interface's sensors)
+Modification note. The configurations are adapted from bota_demo_py's bota_config/; the F/T
+code in third_party/UMI_collection/force_torque/ drives the Bota driver, payload estimator and
+compensator packages (installed from PyPI) as the Bota demos do. The pure-numpy RNEA
+compensator in third_party/UMI_collection/third_party/bota_demo_py/ is original FLoRe code.
+
+BSD 3-Clause License with Attribution Requirement 
+
+Copyright (c) 2025, Bota Systems AG
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+1. Redistributions must reproduce the above copyright notice, this list of conditions, and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+2. Proper attribution must be given to Bota Systems AG in any documentation, advertising material, or user interface where the software is used. Attribution should include the company name and a link to the company’s website (if applicable).
+
+3. Neither the name of Bota Systems AG nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS” AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.

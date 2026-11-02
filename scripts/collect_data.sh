@@ -83,7 +83,7 @@
 # RIGHT_GRIPPER=0 skip a device; CAMERA_SERIAL= / RIGHT_CAMERA_SERIAL=, FT_LEFT_SERIAL= /
 # FT_RIGHT_SERIAL= (MANDATORY to pin with two Botas: by-id names sort 3472… before 3875…),
 # GRIPPER_RIGHT_CAN_SERIAL= / GRIPPER_RIGHT_CHANNEL=canN. Gripper keys, hold to move: f = LEFT
-# close, g = LEFT open, j = RIGHT close, k = RIGHT open — off viser's camera keys w/a/s/d/q/e.
+# close, g = LEFT open, j = RIGHT open, k = RIGHT close — off viser's camera keys w/a/s/d/q/e.
 # Pressing `s` (or Start) AUTO-TARES every attached Bota: hold both grippers clear of contact.
 #
 # Pre-launch self-check + go/no-go gate: device preflight, VIVE trackers, gripper self-test,
@@ -107,7 +107,8 @@
 # CAMERA_PUBLISH_HZ=30 publish: the publish rate is the dataset's master timeline and must
 # divide CAMERA_FPS (uniform decimation); 15 still converts, with a coarser action grid.
 #
-# Prereqs (one-time): the submodule's bootstrap.sh (three uv venvs + source-built libsurvive).
+# Prereqs (one-time): third_party/UMI_collection/bootstrap.sh (two uv venvs + source-built
+# libsurvive); see third_party/UMI_collection/README.md.
 #
 # Usage:
 #   bash scripts/collect_data.sh                     # 3pt viz only (no recording)
@@ -154,7 +155,7 @@ seen must decode its OOTX blob before ANY room solve, so fewer stations lock fas
 
 Right-hand devices are OPTIONAL (reported ⚠️ degraded, recorded as absent). Skip one
 with RIGHT_CAMERA=0 / RIGHT_FT=0 / RIGHT_GRIPPER=0. Gripper keys (hold to move):
-  f = LEFT close   g = LEFT open      j = RIGHT close   k = RIGHT open
+  f = LEFT close   g = LEFT open      j = RIGHT open    k = RIGHT close
 
 Once the base stations are solved the launcher STOPS at a gate, prints each station's live
 acc err (|up_z−1| against its tilt sensor, ~0 is good; refreshed every 2 s) and waits for
@@ -206,8 +207,8 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 UMI="$REPO_ROOT/third_party/UMI_collection"
 
 if [ ! -f "$UMI/run_collection_viz.sh" ]; then
-  echo "[collect_data] ERROR: submodule not initialized at $UMI" >&2
-  echo "[collect_data]   run: git submodule update --init third_party/UMI_collection" >&2
+  echo "[collect_data] ERROR: the collection stack is missing at $UMI" >&2
+  echo "[collect_data]   it ships with this repository: git checkout -- third_party/UMI_collection" >&2
   exit 1
 fi
 

@@ -1,0 +1,7 @@
+{
+  "enc_closed": 0.0,
+  "enc_open": 4.9,
+  "width_closed_m": 0.0,
+  "width_open_m": 0.095,
+  "_note": "DECISION-H: two-finger total opening. width_open_m=0.095 is the URDF estimate (2 x 0.0475 m finger stroke; URDF comment '~98 mm open'). enc_closed/enc_open are the i2rt defaults and MUST be re-mapped per power-cycle (GRIPPER_OPEN/GRIPPER_CLOSED). CONFIRM width_open_m with calipers before training (crosses UMI's 0.08 m grasp threshold)."
+}

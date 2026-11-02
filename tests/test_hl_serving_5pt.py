@@ -575,6 +575,7 @@ def test_infer_chunk_refuses_a_planner_with_no_policy():
 # ---------------------------------------------------------------------------
 @needs_rig
 def test_the_deploy_anchor_answers_for_all_five_roles():
+    pytest.importorskip("yourdfpy")
     from flore.s1_policy.inference import ready_pose as RP
 
     anchor, why = RP.resolve_deploy_anchor(LAY.roles)
@@ -590,6 +591,7 @@ def test_the_ready_pose_wire_is_holosomas_own_gate_reference():
     """The readout pelvis must be the ANCHOR's ``(0, 0, pelvis_z)`` and never
     ``mc_frames.PELVIS_STAND_Z`` (0.79186), which belongs to the teleop path's ``cond_mode=home``
     placement and would put every keypoint 35 mm low."""
+    pytest.importorskip("yourdfpy")
     from flore.s1_policy.inference import ready_pose as RP
 
     anchor, why = RP.resolve_deploy_anchor(LAY.roles)
